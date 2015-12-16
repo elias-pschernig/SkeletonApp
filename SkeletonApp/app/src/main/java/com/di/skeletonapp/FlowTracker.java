@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class FlowTracker implements Parcelable {
 
+    FlowTracker parent;
     String uri;
     String[] parameters;
 
@@ -18,6 +19,8 @@ public class FlowTracker implements Parcelable {
             return new FlowTracker[size];
         }
     };
+
+    private boolean mIsSibling;
 
     FlowTracker(String uri, String[] parameters) {
         this.uri = uri;
@@ -40,4 +43,31 @@ public class FlowTracker implements Parcelable {
         dest.writeStringArray(parameters);
     }
 
+    public void setParent(FlowTracker parent) {
+        this.parent = parent;
+    }
+
+    public FlowTracker getParent() {
+        return parent;
+    }
+
+    @Override
+    public String toString() {
+        String s = this.uri + "(";
+        for (String p : parameters) {
+            if (!s.endsWith("("))
+                s += ", ";
+            s += p;
+        }
+        s += ")";
+        return s;
+    }
+
+    public void setIsSibling(boolean isSibling) {
+        mIsSibling = isSibling;
+    }
+
+    public boolean isSibling() {
+        return mIsSibling;
+    }
 }

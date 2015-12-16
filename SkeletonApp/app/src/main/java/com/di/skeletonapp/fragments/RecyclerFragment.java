@@ -1,5 +1,6 @@
 package com.di.skeletonapp.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,8 +79,12 @@ public class RecyclerFragment extends Fragment {
         mRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
+        Activity activity = getActivity();
+        // TODO: how can this happen and what should we do
+        if (activity == null)
+            return;
         // LinearLayoutManager makes the items appear as a vertical list
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         // our adapter which takes care of managing the items in the list as well of presenting them
         mAdapter = new RecyclerAdapter();

@@ -34,8 +34,7 @@ public class HomeFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param parameters Parametera for this fragment.
      * @return A new instance of fragment HomeFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -72,7 +71,7 @@ public class HomeFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onButtonClicked("A", "1");
+                mListener.onHomeButtonClicked("A", "1");
             }
         });
     }
@@ -105,6 +104,6 @@ public class HomeFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onButtonClicked(String param1, String param2);
+        void onHomeButtonClicked(String param1, String param2);
     }
 }

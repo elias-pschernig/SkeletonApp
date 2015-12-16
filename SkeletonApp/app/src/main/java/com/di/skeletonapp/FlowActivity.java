@@ -54,7 +54,6 @@ public class FlowActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Override
     public void onResume() {
-        Log.d("flow", "onResume");
         super.onResume();
         mFlowDelegate.onResume();
     }
@@ -78,16 +77,25 @@ public class FlowActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Override
     public void onBackPressed() {
-        Log.d("flow", "onBackPressed");
         if (!mFlowDelegate.onBackPressed()) {
             // TODO: back pressed on last screen
             //super.onBackPressed();
         }
     }
 
+    public void onUpPressed() {
+        Flow flow = (Flow)mFlowDelegate.getSystemService("flow.Flow.FLOW_SERVICE");
+        FlowTracker current = flow.getHistory().top();
+        if (current.getParent() != null) {
+            flow.set(current.getParent());
+        }
+        else {
+            onBackPressed();
+        }
+    }
+
     @Override
     public Object getSystemService(String name) {
-        Log.d("flow", "getSystemService " + name);
         Object service = null;
         if (mFlowDelegate != null)
             service = mFlowDelegate.getSystemService(name);
@@ -114,11 +122,63 @@ public class FlowActivity extends AppCompatActivity implements Flow.Dispatcher {
         callback.onTraversalCompleted();
     }
 
-    public void setFlow(String uri, String... params) {
-        // FIXME: is there another way?
-        Flow flow = (Flow)mFlowDelegate.getSystemService("flow.Flow.FLOW_SERVICE");
+    public void setFlow(String uri, String[] params, boolean canGoBack, boolean goUp) {
+        Flow flow = getFlow();
+
+        History history = flow.getHistory();
+        FlowTracker current = history.top();
+
         Log.d("flow", "set " + uri);
-        Log.d("flow", "history: " + flow.getHistory());
-        flow.set(new FlowTracker(uri, params));
+        Log.d("flow", "history: " + history);
+        FlowTracker tracker = new FlowTracker(uri, params);
+        if (!canGoBack) {
+            flow.setHistory(History.single(tracker), Flow.Direction.REPLACE);
+        }
+        else {
+            if (goUp) {
+                tracker.setParent(current);
+            }
+            else {
+                tracker.setParent(current.getParent());
+                tracker.setIsSibling(true);
+            }
+        }
+        flow.set(tracker);
+    }
+
+    public void setFlowRoot(String uri, String... params) {
+        setFlow(uri, params, false, false);
+    }
+
+    public void setFlowUp(String uri, String... params) {
+        setFlow(uri, params, true, true);
+    }
+
+    public void setFlowBack(String uri, String... params) {
+        setFlow(uri, params, true, false);
+    }
+
+    String getBackStackDescription() {
+        String s = "";
+        for (Object o : getFlow().getHistory()) {
+            FlowTracker t = (FlowTracker)o;
+            String s2 = t.toString();
+            if (t.isSibling()) {
+                s2 = " -> " + s2;
+            }
+            else {
+                if (t.getParent() != null)
+                    s2 = " / " + s2;
+            }
+            s = s2 + s;
+        }
+        return s;
+    }
+
+    Flow getFlow() {
+        // FIXME: is there another way?
+        Flow flow = (Flow) mFlowDelegate.getSystemService("flow.Flow.FLOW_SERVICE");
+        //Flow flow = Flow.get(getApplicationContext());
+        return flow;
     }
 }

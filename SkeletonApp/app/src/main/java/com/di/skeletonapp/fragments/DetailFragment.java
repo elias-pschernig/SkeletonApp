@@ -36,8 +36,7 @@ public class DetailFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param parameters Parameters for this fragment.
      * @return A new instance of fragment DetailFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -75,7 +74,7 @@ public class DetailFragment extends Fragment {
                 char c = mParam1.charAt(0);
                 c++;
                 String x = Character.toString(c);
-                mListener.onButtonClicked(x, mParam2);
+                mListener.onDetailButton1Clicked(x, mParam2);
             }
         });
 
@@ -83,10 +82,10 @@ public class DetailFragment extends Fragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                char c = mParam2.charAt(0);
-                c++;
-                String x = Character.toString(c);
-                mListener.onButtonClicked(mParam1, x);
+                Integer i = Integer.parseInt(mParam2);
+                i++;
+                String x = Integer.toString(i);
+                mListener.onDetailButton2Clicked(mParam1, x);
             }
         });
 
@@ -121,6 +120,7 @@ public class DetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onButtonClicked(String param1, String param2);
+        void onDetailButton1Clicked(String param1, String param2);
+        void onDetailButton2Clicked(String param1, String param2);
     }
 }

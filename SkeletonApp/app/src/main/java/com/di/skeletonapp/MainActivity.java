@@ -26,10 +26,12 @@ public class MainActivity extends FlowActivity
         TabsFragment.OnFragmentInteractionListener,
         RecyclerFragment.OnFragmentInteractionListener,
         TabPageFragment.OnFragmentInteractionListener,
-        DetailFragment.OnFragmentInteractionListener
-{
+        DetailFragment.OnFragmentInteractionListener {
 
     private Toolbar mToolbar;
+    private ActionBarDrawerToggle mToggle;
+    private boolean mBackArrowShown;
+    private boolean mUseAsBackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,22 +44,49 @@ public class MainActivity extends FlowActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, getBackStackDescription(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(
                 this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawer.setDrawerListener(mToggle);
+        mToggle.syncState();
+
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mBackArrowShown) {
+                    if (mUseAsBackButton)
+                        onBackPressed();
+                    else
+                        onUpPressed();
+                }
+                else
+                    drawer.openDrawer(GravityCompat.START);
+            }
+        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        setFlow("home", "test", "test");
+        setFlowRoot("home", "test", "test");
         //autoLaunchFragment(HomeFragment.newInstance("test", "test"));
+    }
+
+    void showBackArrow(boolean yes) {
+        if (yes == mBackArrowShown)
+            return;
+        mBackArrowShown = yes;
+        if (yes) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            mToggle.syncState();
+        }
     }
 
     @Override
@@ -86,6 +115,9 @@ public class MainActivity extends FlowActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            mUseAsBackButton = !mUseAsBackButton;
+            item.setChecked(mUseAsBackButton);
+
             return true;
         }
 
@@ -98,13 +130,13 @@ public class MainActivity extends FlowActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            setFlow("home", "test", "test");
+            setFlowRoot("home", "test", "test");
             //autoLaunchFragment(HomeFragment.newInstance("test", "test"));
         } else if (id == R.id.nav_tabs) {
-            setFlow("tabs", "test", "test");
+            setFlowRoot("tabs", "test", "test");
             //autoLaunchFragment(TabsFragment.newInstance("test", "test"));
         } else if (id == R.id.nav_recycler) {
-            setFlow("recycler", "test", "test");
+            setFlowRoot("recycler", "test", "test");
             //autoLaunchFragment(RecyclerFragment.newInstance("test", "test"));
         }
 
@@ -116,13 +148,12 @@ public class MainActivity extends FlowActivity
     @Override
     public Fragment createFragment(FlowTracker position) {
         if (mToolbar != null) {
-            mToolbar.setTitle(position.uri);
             if (position.uri.equals("detail")) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                showBackArrow(true);
+            } else {
+                showBackArrow(false);
             }
-            else {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            }
+            mToolbar.setTitle(position.uri);
         }
 
         if (position.uri.equals("home"))
@@ -138,12 +169,12 @@ public class MainActivity extends FlowActivity
     }
 
     //public void autoLaunchFragment(Fragment fragment) {
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        //FragmentTransaction transaction = fragmentManager.beginTransaction();
-        //transaction.replace(R.id.container, fragment);
-        //transaction.commit();
+    //FragmentManager fragmentManager = getSupportFragmentManager();
+    //FragmentTransaction transaction = fragmentManager.beginTransaction();
+    //transaction.replace(R.id.container, fragment);
+    //transaction.commit();
 
-        //setFlow(fragment.toString());
+    //setFlow(fragment.toString());
     //}
 
     @Override
@@ -152,9 +183,21 @@ public class MainActivity extends FlowActivity
     }
 
     @Override
-    public void onButtonClicked(String param1, String param2) {
+    public void onHomeButtonClicked(String param1, String param2) {
         //autoLaunchFragment(DetailFragment.newInstance(param1, param2));
-        setFlow("detail", param1, param2);
+        setFlowUp("detail", param1, param2);
+    }
+
+    @Override
+    public void onDetailButton1Clicked(String param1, String param2) {
+        //autoLaunchFragment(DetailFragment.newInstance(param1, param2));
+        setFlowUp("detail", param1, param2);
+    }
+
+    @Override
+    public void onDetailButton2Clicked(String param1, String param2) {
+        //autoLaunchFragment(DetailFragment.newInstance(param1, param2));
+        setFlowBack("detail", param1, param2);
     }
 
 }
