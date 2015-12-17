@@ -3,11 +3,24 @@ package com.di.skeletonapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * This identifies one "screen" in the application flow. For us each screen also is a fragment
+ * view. The screen is identified by its name and an array of parameters... in a real
+ * application there should probably be one class for each screen derived from this one with
+ * its proper parameters.
+ * TODO: Is there a way to automatically parcelise?
+ */
 public class FlowTracker implements Parcelable {
 
-    FlowTracker parent;
     String uri;
     String[] parameters;
+
+    // Either null if this is a root item, or else the parent screen.
+    // TODO: need to make this parcelable so history can persist over a terminated app
+    FlowTracker parent;
+
+    private boolean mIsSibling;
+
 
     public static final Parcelable.Creator<FlowTracker> CREATOR
             = new Parcelable.Creator<FlowTracker>() {
@@ -19,8 +32,6 @@ public class FlowTracker implements Parcelable {
             return new FlowTracker[size];
         }
     };
-
-    private boolean mIsSibling;
 
     FlowTracker(String uri, String[] parameters) {
         this.uri = uri;
