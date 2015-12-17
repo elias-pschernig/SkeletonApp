@@ -2,6 +2,9 @@ package com.di.skeletonapp;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import com.di.skeletonapp.framework.Screen;
 
 /**
  * This identifies one "screen" in the application flow. For us each screen also is a fragment
@@ -10,7 +13,7 @@ import android.os.Parcelable;
  * its proper parameters.
  * TODO: Is there a way to automatically parcelise?
  */
-public class FlowTracker implements Parcelable {
+public class FlowTracker implements Parcelable, Screen {
 
     String uri;
     String[] parameters;
@@ -20,6 +23,10 @@ public class FlowTracker implements Parcelable {
     FlowTracker parent;
 
     private boolean mIsSibling;
+
+    // TODO: I don't like this but the activity is needed and couldn't figure out a better
+    // way to obtain a reference to it so far.
+    private static FlowActivity mActivity;
 
 
     public static final Parcelable.Creator<FlowTracker> CREATOR
@@ -36,11 +43,13 @@ public class FlowTracker implements Parcelable {
     FlowTracker(String uri, String[] parameters) {
         this.uri = uri;
         this.parameters = parameters;
+        Log.d("FlowTracker", "storing " + this.toString());
     }
 
     FlowTracker(Parcel in) {
         this.uri = in.readString();
         this.parameters = in.createStringArray();
+        Log.d("FlowTracker", "restoring " + this.toString());
     }
 
     @Override
@@ -80,5 +89,20 @@ public class FlowTracker implements Parcelable {
 
     public boolean isSibling() {
         return mIsSibling;
+    }
+
+    public static void connectActivity(FlowActivity activity) {
+        mActivity = activity;
+    }
+
+    public static void disconnectActivity() {
+        mActivity = null;
+    }
+
+    @Override
+    public void activate() {
+        if (mActivity == null)
+            return;
+        mActivity.showFragment(this);
     }
 }

@@ -6,6 +6,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -146,7 +148,8 @@ public class MainActivity extends FlowActivity
     }
 
     @Override
-    public Fragment createFragment(FlowTracker position) {
+    public void showFragment(FlowTracker position) {
+        Fragment fragment = null;
         if (mToolbar != null) {
             if (position.uri.equals("detail")) {
                 showBackArrow(true);
@@ -157,15 +160,21 @@ public class MainActivity extends FlowActivity
         }
 
         if (position.uri.equals("home"))
-            return HomeFragment.newInstance(position.parameters);
-        if (position.uri.equals("tabs"))
-            return TabsFragment.newInstance(position.parameters);
-        if (position.uri.equals("recycler"))
-            return RecyclerFragment.newInstance(position.parameters);
-        if (position.uri.equals("detail"))
-            return DetailFragment.newInstance(position.parameters);
+            fragment = HomeFragment.newInstance(position.parameters);
+        else if (position.uri.equals("tabs"))
+            fragment = TabsFragment.newInstance(position.parameters);
+        else if (position.uri.equals("recycler"))
+            fragment =  RecyclerFragment.newInstance(position.parameters);
+        else if (position.uri.equals("detail"))
+            fragment = DetailFragment.newInstance(position.parameters);
 
-        return null;
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.container, fragment);
+            transaction.commit();
+        }
+
     }
 
     //public void autoLaunchFragment(Fragment fragment) {
