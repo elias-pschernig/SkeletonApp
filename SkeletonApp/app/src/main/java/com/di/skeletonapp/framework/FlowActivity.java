@@ -3,19 +3,36 @@ package com.di.skeletonapp.framework;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import icepick.Icepick;
+import icepick.State;
+
 /**
- * Flow is very complex, this class has some of the required glue code.
+ * Base class for the main activity which handles some of the gory details.
  */
 public abstract class FlowActivity extends AppCompatActivity {
+    @State
     FlowHistory mFlowHistory;
 
+    /**
+     * What we do here is provide the activity instance to the FlowScreen class and make sure
+     * to restore mFlowHistory from the saved instance (or recreate on first run).
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FlowScreen.connectActivity(this);
+        Icepick.restoreInstanceState(this, savedInstanceState);
         if (mFlowHistory == null) {
             mFlowHistory = new FlowHistory();
         }
+    }
+
+    /**
+     * Store (via icepick) the activity state.
+     */
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
@@ -47,8 +64,6 @@ public abstract class FlowActivity extends AppCompatActivity {
             onBackPressed();
         }
     }
-
-    public abstract void showFragment(FlowScreen position);
 
     public abstract void showCurrentFragment();
 

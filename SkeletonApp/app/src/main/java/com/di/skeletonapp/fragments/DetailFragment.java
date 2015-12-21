@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.di.skeletonapp.R;
+import com.di.skeletonapp.framework.FlowStack;
 import com.di.skeletonapp.framework.FlowActivity;
 import com.di.skeletonapp.framework.FlowFragment;
-import com.di.skeletonapp.framework.FlowStack;
 import com.di.skeletonapp.model.Detail;
 import com.di.skeletonapp.ui.DetailUi;
+
+import icepick.State;
 
 /**
  * Fragment showing some detail for an item, with a way to show details of another item.
@@ -18,6 +20,7 @@ import com.di.skeletonapp.ui.DetailUi;
  * for.
  */
 public class DetailFragment extends FlowFragment {
+    @State
     Detail mDetail;
     DetailUi mUi;
 
@@ -48,5 +51,4 @@ public class DetailFragment extends FlowFragment {
         Detail newDetail = new Detail(mDetail.getLetter(), mDetail.getNextNumber());
         FlowStack.setBackstackBack((FlowActivity) getActivity(), DetailFragment.newInstance(newDetail));
     }
-
 }

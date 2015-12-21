@@ -5,19 +5,19 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 /**
- * A very simple backstack implementation. It calls the "activate" method of the Screen at the
+ * A very simple back stack implementation. It calls the "activate" method of the FlowScreen at the
  * top of the stack whenever the contents change.
  *
  * It also has the ability to save and restore itself from the application bundle by implementing
  * the Parcelable interface.
  */
 public class FlowHistory implements Serializable {
-    private Deque<FlowScreen> mDeque = new ArrayDeque<FlowScreen>();
+    private Deque<FlowScreen> mDeque = new ArrayDeque<>();
 
     private void activateCurrent() {
         FlowScreen current = getCurrent();
         if (current != null) {
-            current.activate();
+            FlowScreen.activate();
         }
     }
 
@@ -27,7 +27,7 @@ public class FlowHistory implements Serializable {
      */
     public void add(FlowScreen screen) {
         mDeque.addLast(screen);
-        screen.activate();
+        FlowScreen.activate();
     }
 
     /**
@@ -41,7 +41,7 @@ public class FlowHistory implements Serializable {
         while (!mDeque.isEmpty()) {
             FlowScreen last = mDeque.getLast();
             if (last == screen) {
-                screen.activate();
+                FlowScreen.activate();
                 return true;
             }
             mDeque.removeLast();
@@ -57,7 +57,7 @@ public class FlowHistory implements Serializable {
         if (mDeque.isEmpty()) return false;
         mDeque.removeLast();
         if (mDeque.isEmpty()) return false;
-        mDeque.getLast().activate();
+        FlowScreen.activate();
         return true;
     }
 
@@ -65,10 +65,13 @@ public class FlowHistory implements Serializable {
         return mDeque.peekLast();
     }
 
-    public Iterable<? extends Object> getHistory() {
+    public Iterable<FlowScreen> getHistory() {
         return mDeque;
     }
 
+    /**
+     * Clear the entire back stack.
+     */
     public void clear() {
         mDeque.clear();
     }

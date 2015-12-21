@@ -7,9 +7,6 @@ import android.widget.TextView;
 import com.di.skeletonapp.R;
 import com.di.skeletonapp.fragments.DetailFragment;
 
-/**
- * Created by elias on 12/21/15.
- */
 public class DetailUi {
     private final View mView;
     private final DetailFragment mFragment;
@@ -39,4 +36,5 @@ public class DetailUi {
         TextView text = (TextView)mView.findViewById(R.id.detail_text);
         text.append(value);
     }
+
 }

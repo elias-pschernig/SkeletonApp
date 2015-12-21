@@ -41,7 +41,7 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return TabPageFragment.newInstance("tab number " + position, "test");
+        return TabPageFragment.newInstance("tab number " + position);
     }
 
     public CharSequence getPageTitle(int position) {

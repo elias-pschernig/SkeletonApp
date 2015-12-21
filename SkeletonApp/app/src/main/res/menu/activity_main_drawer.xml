@@ -14,6 +14,10 @@
             android:id="@+id/nav_recycler"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Recycler" />
+        <item
+            android:id="@+id/nav_calculator"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Calculator" />
 
     </group>
 

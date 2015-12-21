@@ -9,18 +9,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.di.skeletonapp.fragments.DetailFragment;
+import com.di.skeletonapp.fragments.CalculatorFragment;
 import com.di.skeletonapp.fragments.HomeFragment;
 import com.di.skeletonapp.fragments.RecyclerFragment;
 import com.di.skeletonapp.fragments.TabsFragment;
+import com.di.skeletonapp.framework.FlowStack;
 import com.di.skeletonapp.framework.FlowActivity;
 import com.di.skeletonapp.framework.FlowScreen;
+import com.di.skeletonapp.model.Calculator;
 
 public class MainActivity extends FlowActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,7 +34,7 @@ public class MainActivity extends FlowActivity
     private boolean mUseAsBackButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,8 +63,7 @@ public class MainActivity extends FlowActivity
                         onBackPressed();
                     else
                         onUpPressed();
-                }
-                else
+                } else
                     drawer.openDrawer(GravityCompat.START);
             }
         });
@@ -69,19 +71,25 @@ public class MainActivity extends FlowActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        setFlowRoot("home", "test", "test");
-        //autoLaunchFragment(HomeFragment.newInstance("test", "test"));
+        // On first start of the activity, display home fragment. Otherwise continue where
+        // we left.
+        if (savedInstanceState == null)
+            FlowStack.setBackstackRoot(this, HomeFragment.newInstance());
+        else
+            syncBackButton();
     }
 
     void showBackArrow(boolean yes) {
         if (yes == mBackArrowShown)
             return;
         mBackArrowShown = yes;
+        ActionBar bar = getSupportActionBar();
+        if (bar == null)
+            return;
         if (yes) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            bar.setDisplayHomeAsUpEnabled(true);
+        } else {
+            bar.setDisplayHomeAsUpEnabled(false);
             mToggle.syncState();
         }
     }
@@ -127,14 +135,13 @@ public class MainActivity extends FlowActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            setFlowRoot("home", "test", "test");
-            //autoLaunchFragment(HomeFragment.newInstance("test", "test"));
+            FlowStack.setBackstackRoot(this, HomeFragment.newInstance());
         } else if (id == R.id.nav_tabs) {
-            setFlowRoot("tabs", "test", "test");
-            //autoLaunchFragment(TabsFragment.newInstance("test", "test"));
+            FlowStack.setBackstackRoot(this, TabsFragment.newInstance());
         } else if (id == R.id.nav_recycler) {
-            setFlowRoot("recycler", "test", "test");
-            //autoLaunchFragment(RecyclerFragment.newInstance("test", "test"));
+            FlowStack.setBackstackRoot(this, RecyclerFragment.newInstance());
+        } else if (id == R.id.nav_calculator) {
+            FlowStack.setBackstackRoot(this, CalculatorFragment.newInstance(new Calculator(0.0)));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -142,34 +149,38 @@ public class MainActivity extends FlowActivity
         return true;
     }
 
-    @Override
-    public void showFragment(FlowScreen position) {
-        Fragment fragment = null;
-        if (mToolbar != null) {
-            if (position.uri.equals("detail")) {
-                showBackArrow(true);
-            } else {
-                showBackArrow(false);
-            }
-            mToolbar.setTitle(position.uri);
-        }
-
-        if (position.uri.equals("home"))
-            fragment = HomeFragment.newInstance(position.parameters);
-        else if (position.uri.equals("tabs"))
-            fragment = TabsFragment.newInstance(position.parameters);
-        else if (position.uri.equals("recycler"))
-            fragment =  RecyclerFragment.newInstance(position.parameters);
-        else if (position.uri.equals("detail"))
-            fragment = DetailFragment.newInstance(position.parameters);
+    public void showCurrentFragment() {
+        FlowScreen position = getHistory().getCurrent();
+        if (position == null)
+            return;
+        Fragment fragment = position.getFragment();
 
         if (fragment != null) {
+            if (mToolbar != null) {
+                syncBackButton();
+                mToolbar.setTitle(fragment.getClass().getSimpleName());
+            }
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.container, fragment);
             transaction.commit();
         }
 
+    }
+
+    private void syncBackButton() {
+        if (mToolbar != null) {
+            FlowScreen position = getHistory().getCurrent();
+            if (position != null) {
+
+                if (position.getParent() != null) {
+                    showBackArrow(true);
+                } else {
+                    showBackArrow(false);
+                }
+            }
+        }
     }
 
 
