@@ -30,6 +30,7 @@ public class CalculatorFragment extends FlowFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calculator, container, false);
         mUi = new CalculatorUi(view, this);
+        mUi.setValue(mCalculator.getValue());
         return view;
     }
 
