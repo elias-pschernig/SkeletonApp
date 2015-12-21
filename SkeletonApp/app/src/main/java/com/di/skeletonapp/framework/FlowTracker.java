@@ -1,10 +1,8 @@
-package com.di.skeletonapp;
+package com.di.skeletonapp.framework;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-
-import com.di.skeletonapp.framework.Screen;
 
 /**
  * This identifies one "screen" in the application flow. For us each screen also is a fragment
@@ -15,8 +13,8 @@ import com.di.skeletonapp.framework.Screen;
  */
 public class FlowTracker implements Parcelable, Screen {
 
-    String uri;
-    String[] parameters;
+    public String uri;
+    public String[] parameters;
 
     // Either null if this is a root item, or else the parent screen.
     // TODO: need to make this parcelable so history can persist over a terminated app

@@ -21,6 +21,8 @@ import com.di.skeletonapp.fragments.HomeFragment;
 import com.di.skeletonapp.fragments.RecyclerFragment;
 import com.di.skeletonapp.fragments.TabPageFragment;
 import com.di.skeletonapp.fragments.TabsFragment;
+import com.di.skeletonapp.framework.FlowActivity;
+import com.di.skeletonapp.framework.FlowTracker;
 
 public class MainActivity extends FlowActivity
         implements NavigationView.OnNavigationItemSelectedListener,

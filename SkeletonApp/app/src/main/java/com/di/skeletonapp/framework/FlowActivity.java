@@ -1,9 +1,7 @@
-package com.di.skeletonapp;
+package com.di.skeletonapp.framework;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
-import com.di.skeletonapp.framework.BackStack;
 
 /**
  * Flow is very complex, this class has some of the required glue code.
@@ -87,7 +85,7 @@ public abstract class FlowActivity extends AppCompatActivity {
         setFlow(uri, params, true, false);
     }
 
-    String getBackStackDescription() {
+    public String getBackStackDescription() {
         String s = "";
         for (Object o : mBackStack.getHistory()) {
             FlowTracker t = (FlowTracker)o;
