@@ -7,25 +7,25 @@ import android.support.v7.app.AppCompatActivity;
  * Flow is very complex, this class has some of the required glue code.
  */
 public abstract class FlowActivity extends AppCompatActivity {
-    BackStack<FlowTracker> mBackStack;
+    FlowHistory mBackStack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FlowTracker.connectActivity(this);
-        mBackStack = (BackStack<FlowTracker>) BackStack.onCreate(savedInstanceState);
+        FlowScreen.connectActivity(this);
+        mBackStack = FlowHistory.onCreate(savedInstanceState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        FlowTracker.connectActivity(this);
+        FlowScreen.connectActivity(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        FlowTracker.disconnectActivity();
+        FlowScreen.disconnectActivity();
     }
 
     @Override
@@ -43,7 +43,7 @@ public abstract class FlowActivity extends AppCompatActivity {
     }
 
     public void onUpPressed() {
-        FlowTracker current = mBackStack.getCurrent();
+        FlowScreen current = mBackStack.getCurrent();
         if (current.getParent() != null) {
             mBackStack.goUpTo(current.getParent());
         }
@@ -52,12 +52,12 @@ public abstract class FlowActivity extends AppCompatActivity {
         }
     }
 
-    public abstract void showFragment(FlowTracker position);
+    public abstract void showFragment(FlowScreen position);
 
     public void setFlow(String uri, String[] params, boolean canGoBack, boolean goUp) {
-        FlowTracker current = mBackStack.getCurrent();
+        FlowScreen current = mBackStack.getCurrent();
 
-        FlowTracker tracker = new FlowTracker(uri, params);
+        FlowScreen tracker = new FlowScreen(uri, params);
         if (!canGoBack) {
             mBackStack.clear();
         }
@@ -88,7 +88,7 @@ public abstract class FlowActivity extends AppCompatActivity {
     public String getBackStackDescription() {
         String s = "";
         for (Object o : mBackStack.getHistory()) {
-            FlowTracker t = (FlowTracker)o;
+            FlowScreen t = (FlowScreen)o;
             String s2 = t.toString();
             if (t.isSibling()) {
                 s2 = " -> " + s2;

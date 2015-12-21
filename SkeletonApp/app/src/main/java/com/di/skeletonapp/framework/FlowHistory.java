@@ -14,14 +14,14 @@ import java.util.Deque;
  * It also has the ability to save and restore itself from the application bundle by implementing
  * the Parcelable interface.
  */
-public class BackStack<T extends Screen> implements Parcelable {
-    private Deque<T> mDeque = new ArrayDeque<T>();
+public class FlowHistory implements Parcelable {
+    private Deque<FlowScreen> mDeque = new ArrayDeque<FlowScreen>();
 
-    protected BackStack(Parcel in) {
+    protected FlowHistory(Parcel in) {
         if (in != null) {
             int n = in.readInt();
             for (int i = 0; i < n; i++) {
-                mDeque.addLast((T) in.readParcelable(null));
+                mDeque.addLast((FlowScreen) in.readParcelable(null));
             }
         }
     }
@@ -29,18 +29,18 @@ public class BackStack<T extends Screen> implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mDeque.size());
-        for (T screen : mDeque) {
+        for (FlowScreen screen : mDeque) {
             screen.writeToParcel(dest, flags);
         }
     }
 
-    static public BackStack<?> onCreate(Bundle savedInstance) {
+    static public FlowHistory onCreate(Bundle savedInstance) {
         if (savedInstance != null) {
-            BackStack<?> backstack = savedInstance.getParcelable("BackStack");
+            FlowHistory backstack = savedInstance.getParcelable("BackStack");
             backstack.activateCurrent();
             return backstack;
         }
-        return new BackStack<>(null);
+        return new FlowHistory(null);
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -49,21 +49,21 @@ public class BackStack<T extends Screen> implements Parcelable {
 
 
     private void activateCurrent() {
-        T current = getCurrent();
+        FlowScreen current = getCurrent();
         if (current != null) {
             current.activate();
         }
     }
 
-    public static final Creator<BackStack> CREATOR = new Creator<BackStack>() {
+    public static final Creator<FlowHistory> CREATOR = new Creator<FlowHistory>() {
         @Override
-        public BackStack createFromParcel(Parcel in) {
-            return new BackStack(in);
+        public FlowHistory createFromParcel(Parcel in) {
+            return new FlowHistory(in);
         }
 
         @Override
-        public BackStack[] newArray(int size) {
-            return new BackStack[size];
+        public FlowHistory[] newArray(int size) {
+            return new FlowHistory[size];
         }
     };
 
@@ -71,7 +71,7 @@ public class BackStack<T extends Screen> implements Parcelable {
      * Add a new screen to the back stack.
      * @param screen
      */
-    public void add(T screen) {
+    public void add(FlowScreen screen) {
         mDeque.addLast(screen);
         screen.activate();
     }
@@ -81,11 +81,11 @@ public class BackStack<T extends Screen> implements Parcelable {
      * @param screen
      * @return
      */
-    public boolean goUpTo(T screen) {
+    public boolean goUpTo(FlowScreen screen) {
         if (!mDeque.contains(screen))
             return false;
         while (!mDeque.isEmpty()) {
-            T last = mDeque.getLast();
+            FlowScreen last = mDeque.getLast();
             if (last == screen) {
                 screen.activate();
                 return true;
@@ -112,7 +112,7 @@ public class BackStack<T extends Screen> implements Parcelable {
         return 0;
     }
 
-    public T getCurrent() {
+    public FlowScreen getCurrent() {
         return mDeque.peekLast();
     }
 

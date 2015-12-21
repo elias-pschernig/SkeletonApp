@@ -11,40 +11,40 @@ import android.util.Log;
  * its proper parameters.
  * TODO: Is there a way to automatically parcelise?
  */
-public class FlowTracker implements Parcelable, Screen {
+public class FlowScreen implements Parcelable {
 
     public String uri;
     public String[] parameters;
 
     // Either null if this is a root item, or else the parent screen.
     // TODO: need to make this parcelable so history can persist over a terminated app
-    FlowTracker parent;
+    FlowScreen parent;
 
     private boolean mIsSibling;
 
     // TODO: I don't like this but the activity is needed and couldn't figure out a better
     // way to obtain a reference to it so far.
-    private static FlowActivity mActivity;
+    private static transient FlowActivity mActivity;
 
 
-    public static final Parcelable.Creator<FlowTracker> CREATOR
-            = new Parcelable.Creator<FlowTracker>() {
-        public FlowTracker createFromParcel(Parcel in) {
-            return new FlowTracker(in);
+    public static final Parcelable.Creator<FlowScreen> CREATOR
+            = new Parcelable.Creator<FlowScreen>() {
+        public FlowScreen createFromParcel(Parcel in) {
+            return new FlowScreen(in);
         }
 
-        public FlowTracker[] newArray(int size) {
-            return new FlowTracker[size];
+        public FlowScreen[] newArray(int size) {
+            return new FlowScreen[size];
         }
     };
 
-    FlowTracker(String uri, String[] parameters) {
+    FlowScreen(String uri, String[] parameters) {
         this.uri = uri;
         this.parameters = parameters;
         Log.d("FlowTracker", "storing " + this.toString());
     }
 
-    FlowTracker(Parcel in) {
+    FlowScreen(Parcel in) {
         this.uri = in.readString();
         this.parameters = in.createStringArray();
         Log.d("FlowTracker", "restoring " + this.toString());
@@ -61,11 +61,11 @@ public class FlowTracker implements Parcelable, Screen {
         dest.writeStringArray(parameters);
     }
 
-    public void setParent(FlowTracker parent) {
+    public void setParent(FlowScreen parent) {
         this.parent = parent;
     }
 
-    public FlowTracker getParent() {
+    public FlowScreen getParent() {
         return parent;
     }
 
@@ -97,7 +97,6 @@ public class FlowTracker implements Parcelable, Screen {
         mActivity = null;
     }
 
-    @Override
     public void activate() {
         if (mActivity == null)
             return;

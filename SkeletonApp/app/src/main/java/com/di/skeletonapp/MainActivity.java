@@ -22,7 +22,7 @@ import com.di.skeletonapp.fragments.RecyclerFragment;
 import com.di.skeletonapp.fragments.TabPageFragment;
 import com.di.skeletonapp.fragments.TabsFragment;
 import com.di.skeletonapp.framework.FlowActivity;
-import com.di.skeletonapp.framework.FlowTracker;
+import com.di.skeletonapp.framework.FlowScreen;
 
 public class MainActivity extends FlowActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -150,7 +150,7 @@ public class MainActivity extends FlowActivity
     }
 
     @Override
-    public void showFragment(FlowTracker position) {
+    public void showFragment(FlowScreen position) {
         Fragment fragment = null;
         if (mToolbar != null) {
             if (position.uri.equals("detail")) {
