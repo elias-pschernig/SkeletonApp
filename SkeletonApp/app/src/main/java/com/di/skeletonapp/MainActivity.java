@@ -1,6 +1,5 @@
 package com.di.skeletonapp;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,18 +18,12 @@ import android.view.View;
 import com.di.skeletonapp.fragments.DetailFragment;
 import com.di.skeletonapp.fragments.HomeFragment;
 import com.di.skeletonapp.fragments.RecyclerFragment;
-import com.di.skeletonapp.fragments.TabPageFragment;
 import com.di.skeletonapp.fragments.TabsFragment;
 import com.di.skeletonapp.framework.FlowActivity;
 import com.di.skeletonapp.framework.FlowScreen;
 
 public class MainActivity extends FlowActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        HomeFragment.OnFragmentInteractionListener,
-        TabsFragment.OnFragmentInteractionListener,
-        RecyclerFragment.OnFragmentInteractionListener,
-        TabPageFragment.OnFragmentInteractionListener,
-        DetailFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar mToolbar;
     private ActionBarDrawerToggle mToggle;
@@ -178,37 +171,6 @@ public class MainActivity extends FlowActivity
         }
 
     }
-
-    //public void autoLaunchFragment(Fragment fragment) {
-    //FragmentManager fragmentManager = getSupportFragmentManager();
-    //FragmentTransaction transaction = fragmentManager.beginTransaction();
-    //transaction.replace(R.id.container, fragment);
-    //transaction.commit();
-
-    //setFlow(fragment.toString());
-    //}
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onHomeButtonClicked(String param1, String param2) {
-        //autoLaunchFragment(DetailFragment.newInstance(param1, param2));
-        setFlowUp("detail", param1, param2);
-    }
-
-    @Override
-    public void onDetailButton1Clicked(String param1, String param2) {
-        //autoLaunchFragment(DetailFragment.newInstance(param1, param2));
-        setFlowUp("detail", param1, param2);
-    }
-
-    @Override
-    public void onDetailButton2Clicked(String param1, String param2) {
-        //autoLaunchFragment(DetailFragment.newInstance(param1, param2));
-        setFlowBack("detail", param1, param2);
-    }
+    
 
 }
