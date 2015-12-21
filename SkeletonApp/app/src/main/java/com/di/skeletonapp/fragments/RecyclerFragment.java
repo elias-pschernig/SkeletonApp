@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.di.skeletonapp.R;
-import com.di.skeletonapp.framework.FlowFragment;
 import com.di.skeletonapp.ui.RecyclerUi;
+import com.digintent.framework.FlowFragment;
 
 /**
  * Example of a "recycler" list. It is simply a list of items, but is optimized to only load

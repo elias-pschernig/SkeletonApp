@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.di.skeletonapp.R;
-import com.di.skeletonapp.framework.FlowFragment;
 import com.di.skeletonapp.model.Calculator;
 import com.di.skeletonapp.ui.CalculatorUi;
+import com.digintent.framework.FlowFragment;
 
 import icepick.State;
 

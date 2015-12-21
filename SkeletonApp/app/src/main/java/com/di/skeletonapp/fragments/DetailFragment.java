@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.di.skeletonapp.R;
-import com.di.skeletonapp.framework.FlowStack;
-import com.di.skeletonapp.framework.FlowActivity;
-import com.di.skeletonapp.framework.FlowFragment;
 import com.di.skeletonapp.model.Detail;
 import com.di.skeletonapp.ui.DetailUi;
+import com.digintent.framework.FlowActivity;
+import com.digintent.framework.FlowFragment;
+import com.digintent.framework.FlowStack;
 
 import icepick.State;
 

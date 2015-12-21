@@ -1,4 +1,4 @@
-package com.di.skeletonapp.framework;
+package com.digintent.framework;
 
 import java.io.Serializable;
 

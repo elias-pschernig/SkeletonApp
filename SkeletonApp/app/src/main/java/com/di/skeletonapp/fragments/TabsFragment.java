@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.di.skeletonapp.R;
-import com.di.skeletonapp.framework.FlowFragment;
 import com.di.skeletonapp.ui.TabsUi;
+import com.digintent.framework.FlowFragment;
 
 /**
  * Example of a tabbed screen with three tabs to switch between. Each tab is a TabPageFragment.

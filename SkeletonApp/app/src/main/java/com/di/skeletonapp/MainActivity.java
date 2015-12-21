@@ -20,10 +20,10 @@ import com.di.skeletonapp.fragments.CalculatorFragment;
 import com.di.skeletonapp.fragments.HomeFragment;
 import com.di.skeletonapp.fragments.RecyclerFragment;
 import com.di.skeletonapp.fragments.TabsFragment;
-import com.di.skeletonapp.framework.FlowStack;
-import com.di.skeletonapp.framework.FlowActivity;
-import com.di.skeletonapp.framework.FlowScreen;
 import com.di.skeletonapp.model.Calculator;
+import com.digintent.framework.FlowActivity;
+import com.digintent.framework.FlowScreen;
+import com.digintent.framework.FlowStack;
 
 public class MainActivity extends FlowActivity
         implements NavigationView.OnNavigationItemSelectedListener {

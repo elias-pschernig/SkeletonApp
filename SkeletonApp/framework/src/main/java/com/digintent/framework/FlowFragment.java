@@ -1,4 +1,4 @@
-package com.di.skeletonapp.framework;
+package com.digintent.framework;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,4 +24,7 @@ public class FlowFragment extends Fragment {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
+
+    // TODO:
+    //
 }

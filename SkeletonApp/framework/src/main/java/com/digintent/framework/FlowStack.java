@@ -1,4 +1,4 @@
-package com.di.skeletonapp.framework;
+package com.digintent.framework;
 
 public class FlowStack {
     public static void setBackstackUp(FlowActivity activity, FlowFragment fragment) {

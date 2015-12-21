@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.di.skeletonapp.R;
-import com.di.skeletonapp.framework.FlowFragment;
 import com.di.skeletonapp.ui.TabPageUi;
+import com.digintent.framework.FlowFragment;
 
 /**
  * A simple screen showing on one of the tabs of the tabs screen.
